@@ -6,6 +6,9 @@ var rows;
 var w = 20;
 
 var totalBees = 30;
+var beeRatio = 0;
+
+var useRatio = false;
 
 /* p5 functions */
 function setup() {
