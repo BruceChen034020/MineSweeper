@@ -5,8 +5,10 @@ function Cell(i, j, w) {
   this.y = j * w;
   this.w = w;
   this.neighborCount = 0;
-
   this.bee = false;
+  if(random(1)<beeRatio && useRatio==true){
+    this.bee = true;
+  }
   this.revealed = false;
 }
 
