@@ -1,11 +1,11 @@
 /*
 感謝您觀看這份程式碼
-作品名稱: 取地名
+作品名稱: N/A
 作者: 陳光穎 Bruce Chen
 聯絡方式
 Facebook連結: https://www.facebook.com/bruce.chen.372
     LINE ID: brucechen0
-最後修改日期: 2017/7/?
+最後修改日期: 2017/2/3
     版本: N/A
 發表於: https://brucechen034020.github.io/
     程式碼尺度
