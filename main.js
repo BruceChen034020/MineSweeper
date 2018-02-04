@@ -6,7 +6,7 @@
     Facebook連結: https://www.facebook.com/bruce.chen.372
     LINE ID: brucechen0
 最後修改日期: 2017/2/4
-版本: 1.0.0.4
+版本: 1.0.0.5
 發表於: https://brucechen034020.github.io/
 程式碼尺度
   N/A
@@ -45,10 +45,18 @@ var database; // firebase database
 var Naive; // in setup step (bool)
 var score; // points (int)
 var highestScore; // highest score record (int)
+var highestScoreMaker // (string)
 var loading; // web page is loading
+//var userName; // user name // (string)
 
 /* p5 functions */
 function setup() {
+  $.getJSON('https://freegeoip.net/json/', function(data) {
+    console.log(JSON.stringify(data, null, 2));
+    var userName = data['ip']
+    userName += ' (' + (data['country_name']) + ')';
+    localStorage.setItem("name", userName);
+  });
   Naive = true;
   score = 0;
   loading = true;
@@ -66,6 +74,15 @@ function setup() {
   database = firebase.database();
 
   useRatio = false;
+
+  // Initailize document.body elements
+  label6 = createElement('label', 'Your name: ');
+  label6.parent(document.body)
+  textBox5 = createInput('');
+  setTimeout(function(){ textBox5.value(localStorage.getItem('name')); }, 3000);
+  button4 = createButton('Set');
+  button4.mousePressed(button4_Clicked);
+  createP('');
 
   textBox1 = createInput('20');
   label1 = createElement('label', 'columns');
@@ -241,7 +258,8 @@ function gameOver2(){ // 判斷 wheter the game is over (void)
     }
   }
   if(over){ // the game is over
-    setTimeout(function(){ alert("Game over!\r\nYour score: " + score + " points.\r\nHighest score record: " + highestScore + 'points.'); score = 0;}, 0);
+    setTimeout(function(){ alert("Game over!\r\nYour score: " + score + " points.\r\nYour highest score record: " + localStorage.getItem("score")
+      + " points.\r\nGlobal highest score record: " + highestScore + ' points by ' + highestScoreMaker); score = 0;}, 0);
 
     grid = make2DArray(cols, rows);
     for (var i = 0; i < cols; i++) {
@@ -253,16 +271,18 @@ function gameOver2(){ // 判斷 wheter the game is over (void)
     ref1.set(beeData);
     var ref2 = database.ref('reveal/0');
     ref2.set(revealData);
-    console.log(score, highestScore);
+    if(score > localStorage.getItem("score")){
+      localStorage.setItem("score", score);
+    }
     if(highestScore < score){
       var ref = database.ref('highest');
       var data = {
-        Name: 'Anonymous',
+        Name: localStorage.getItem("name"),
         Score: score
       }
       console.log(data);
       ref.set(data);
-      setTimeout(function(){ alert('恭喜你破紀錄了! Congratulations! You broke the record!\r\nNew record: ' + highestScore + 'points.');});
+      setTimeout(function(){ alert('恭喜你破紀錄了! Congratulations! You broke the record!\r\nNew record: ' + highestScore + 'points by ' + highestScoreMaker );});
     }
   }
 }
@@ -349,6 +369,7 @@ function gotData4(data){ // value (void)
   highest = data.val();
   console.log(highest);
   highestScore = highest['Score'];
+  highestScoreMaker = highest['Name'];
   loading = false;
 }
 
@@ -446,6 +467,11 @@ function button3_Clicked(){
       grid[i][j].countBees();
     }
   }
+}
+
+function button4_Clicked(){ // click (void)
+  var userName = textBox5.value();
+  localStorage.setItem("name", userName);
 }
 
 function Sweeper_Clicked(){ // click (void)

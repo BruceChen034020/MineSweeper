@@ -6,7 +6,7 @@
     Facebook連結: https://www.facebook.com/bruce.chen.372
     LINE ID: brucechen0
 最後修改日期: 2017/2/4
-版本: 1.0.0.2
+版本: 1.0.0.5
 發表於: https://brucechen034020.github.io/
 程式碼尺度
   N/A
@@ -15,19 +15,19 @@
   2. 如有任何建議，請用 Facebook(Messenger) 通知 Bruce Chen，謝謝。
 */
 function Cell(i, j, w) {
-  this.i = i;
-  this.j = j;
-  this.x = i * w;
-  this.y = j * w;
-  this.w = w;
-  this.neighborCount = 0;
-  this.bee = false;
+  this.i = i; // column index (int)
+  this.j = j; // row index (int)
+  this.x = i * w; // location (int)
+  this.y = j * w; // 同上 (int)
+  this.w = w; // length of the square cell (int)
+  this.neighborCount = 0; // # of bee neibors (int)
+  this.bee = false; // bee == mine (bool)
   beeData['c'+i+'-'+j] = false;
   if(random(1)<beeRatio && useRatio==true){
     this.bee = true;
     beeData['c'+i+'-'+j] = true;
   }
-  this.revealed = false;
+  this.revealed = false; // (bool)
   revealData['c'+i+'-'+j] = false;
 
 
