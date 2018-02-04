@@ -80,7 +80,7 @@ Cell.prototype.contains = function(x, y) { // A position (of the mouse) in conta
   return (x > this.x && x < this.x + this.w && y > this.y && y < this.y + this.w);
 }
 
-Cell.prototype.reveal = function(recur) { // reveal
+Cell.prototype.reveal = function(recur) { // reveal recur=this is called by a recursive call; default=false.
   this.revealed = true;
   revealData['c'+this.i+'-'+this.j] = true;
 

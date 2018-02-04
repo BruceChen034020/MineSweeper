@@ -6,7 +6,7 @@
 Facebook連結: https://www.facebook.com/bruce.chen.372
     LINE ID: brucechen0
 最後修改日期: 2017/2/4
-    版本: 1.0.0.0
+    版本: 1.0.0.1
 發表於: https://brucechen034020.github.io/
     程式碼尺度
 N/A
@@ -195,6 +195,7 @@ function gameOver() { // (void)
 
 /* Events */
 function gotData1(data){ // value beeData (void)
+  console.log('got value bee');
   beeData = data.val();
   console.log(beeData);
   for(var i=0; i<cols; i++){
@@ -214,7 +215,9 @@ function errData1(err){ // value revealData (void)
 }
 
 function gotData2(data){ // value size (void)
+  console.log('got value reveal');
   revealData = data.val();
+  console.log(revealData);
   for(var i=0; i<cols; i++){
     for(var j=0; j<rows; j++){
       grid[i][j].revealed = revealData['c'+i+'-'+j];
@@ -228,7 +231,9 @@ function errData2(err){ // value (void)
 }
 
 function gotData3(data){ // value (void)
+  console.log('got value size');
   sizeData = data.val();
+  console.log(sizeData);
   var c = sizeData.Cols;
   var r = sizeData.Rows;
   cols = min(c, cols);
