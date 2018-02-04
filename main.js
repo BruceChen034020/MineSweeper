@@ -3,15 +3,15 @@
 作品名稱: Mine sweeper
 作者: 陳光穎 Bruce Chen
 聯絡方式
-Facebook連結: https://www.facebook.com/bruce.chen.372
+    Facebook連結: https://www.facebook.com/bruce.chen.372
     LINE ID: brucechen0
 最後修改日期: 2017/2/4
-    版本: 1.0.0.1
+版本: 1.0.0.3
 發表於: https://brucechen034020.github.io/
-    程式碼尺度
-N/A
+程式碼尺度
+  N/A
 作者註解:
-    1. 如本網頁有 bug 請用 Facebook(Messenger) 通知 Bruce Chen，謝謝。
+  1. 如本網頁有 bug 請用 Facebook(Messenger) 通知 Bruce Chen，謝謝。
   2. 如有任何建議，請用 Facebook(Messenger) 通知 Bruce Chen，謝謝。
 */
 
@@ -41,9 +41,12 @@ var textBox3; // totalBees (Input)
 var textBox4; // beeRatio (Input)
 
 var database; // firebase database
+var Naive; // in setup step (bool)
 
 /* p5 functions */
 function setup() {
+  Naive = true;
+
   // Initialize Firebase
   var config = {
       apiKey: "AIzaSyDo0APvS5wobsjqTZLP3ZjztJweVPn4Tm4",
@@ -90,6 +93,8 @@ function setup() {
   var ref1 = database.ref('bee/-L4RHoBEvd-XDQJ7IBfR');
   var ref2 = database.ref('reveal/0');
   var ref3 = database.ref('size/-L4R24I9ESQ-G_xMicP0');
+
+
 
   ref1.on('value', gotData1, errData1);
   ref2.on('value', gotData2, errData2);
@@ -242,7 +247,7 @@ function gotData3(data){ // value (void)
   widt = c * w + 1;
   heigh = r * w + 1;
   resizeCanvas(widt, heigh);
-
+if(!Naive){
   grid = make2DArray(max(c, cols), max(r, rows));
   for (var i = 0; i < max(c, cols); i++) {
     for (var j = 0; j < max(r, rows); j++) {
@@ -257,6 +262,12 @@ function gotData3(data){ // value (void)
       grid[i][j] = new Cell(i, j, w);
     }
   }
+  var ref1 = database.ref('bee/-L4RHoBEvd-XDQJ7IBfR');
+  ref1.set(beeData);
+  var ref2 = database.ref('reveal/0');
+  ref2.set(revealData);
+}
+  Naive = false;
 }
 
 function errData3(err){ // value (void)
