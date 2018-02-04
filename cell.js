@@ -1,3 +1,19 @@
+/*
+感謝您觀看這份程式碼
+作品名稱: Mine sweeper
+作者: 陳光穎 Bruce Chen
+聯絡方式
+Facebook連結: https://www.facebook.com/bruce.chen.372
+    LINE ID: brucechen0
+最後修改日期: 2017/2/4
+    版本: 1.0.0.0
+發表於: https://brucechen034020.github.io/
+    程式碼尺度
+N/A
+作者註解:
+    1. 如本網頁有 bug 請用 Facebook(Messenger) 通知 Bruce Chen，謝謝。
+  2. 如有任何建議，請用 Facebook(Messenger) 通知 Bruce Chen，謝謝。
+*/
 function Cell(i, j, w) {
   this.i = i;
   this.j = j;
