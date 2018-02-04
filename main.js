@@ -6,7 +6,7 @@
     Facebook連結: https://www.facebook.com/bruce.chen.372
     LINE ID: brucechen0
 最後修改日期: 2017/2/4
-版本: 1.0.0.3
+版本: 1.0.0.4
 發表於: https://brucechen034020.github.io/
 程式碼尺度
   N/A
@@ -39,13 +39,19 @@ var textBox1; // cols (Input)
 var textBox2; // rows (Input)
 var textBox3; // totalBees (Input)
 var textBox4; // beeRatio (Input)
+var label5; // score (Label)
 
 var database; // firebase database
 var Naive; // in setup step (bool)
+var score; // points (int)
+var highestScore; // highest score record (int)
+var loading; // web page is loading
 
 /* p5 functions */
 function setup() {
   Naive = true;
+  score = 0;
+  loading = true;
 
   // Initialize Firebase
   var config = {
@@ -93,15 +99,15 @@ function setup() {
   var ref1 = database.ref('bee/-L4RHoBEvd-XDQJ7IBfR');
   var ref2 = database.ref('reveal/0');
   var ref3 = database.ref('size/-L4R24I9ESQ-G_xMicP0');
-
+  var ref4 = database.ref('highest');
 
 
   ref1.on('value', gotData1, errData1);
   ref2.on('value', gotData2, errData2);
   ref3.on('value', gotData3, errData3);
+  ref4.on('value', gotData4, errData4);
 
-  /*ref1.set(beeData);
-  ref2.set(revealData);*/
+
 
 
 
@@ -113,6 +119,11 @@ function setup() {
   }
 
   /* Set other elements */
+  label5 =  createElement('label');
+  label5.parent(document.body);
+  label5.html('75 points');
+  label5.style('font-size', 72 + 'px')
+
   createP('');
 
   Sweeper = document.createElement("button");
@@ -130,17 +141,34 @@ function setup() {
   ActivatedMineCount.innerHTML = "7 mines are activated.";
   ActivatedMineCount.value = "7 mines are activated.";
 
-
+  Sweeper_Clicked();
 }
 
-function mousePressed() {
+function mousePressed() { // (void)
   for (var i = 0; i < cols; i++) {
     for (var j = 0; j < rows; j++) {
       if (grid[i][j].contains(mouseX, mouseY)) {
+        if(grid[i][j].revealed){
+          return;
+        }
         grid[i][j].reveal(false);
 
-        if (grid[i][j].bee) {
-          gameOver();
+        if (grid[i][j].bee && marking==false) {
+          alert("踩到地雷了，扣40分。You denotated a mine. You are taken 40 points off");
+          score -= 40;
+        }
+
+        if(!grid[i][j].bee && marking==true){
+          alert("標錯了，扣4分。You marked the wrong cell. You are taken 4 points off.");
+          score -= 4;
+        }
+
+        if(grid[i][j].bee && marking==true){
+          score += 4;
+        }
+
+        if(!grid[i][j].bee && marking==false){
+          score += 1;
         }
 
       }
@@ -149,12 +177,18 @@ function mousePressed() {
 }
 
 function draw() {
+  frameRate(10);
   background(255);
   for (var i = 0; i < cols; i++) {
     for (var j = 0; j < rows; j++) {
       grid[i][j].show();
     }
   }
+  label5.html(score + ' points');
+  if(loading){
+    label5.html('Loading...');
+  }
+  gameOver2();
 }
 
 /* User defined functions */
@@ -194,6 +228,41 @@ function gameOver() { // (void)
   for (var i = 0; i < cols; i++) {
     for (var j = 0; j < rows; j++) {
       grid[i][j].revealed = true;
+    }
+  }
+}
+function gameOver2(){ // 判斷 wheter the game is over (void)
+  var over = true;
+  for(var i=0; i<cols; i++){
+    for(var j=0; j<rows; j++){
+      if(grid[i][j].revealed==false){
+        over = false;
+      }
+    }
+  }
+  if(over){ // the game is over
+    setTimeout(function(){ alert("Game over!\r\nYour score: " + score + " points.\r\nHighest score record: " + highestScore + 'points.'); score = 0;}, 0);
+
+    grid = make2DArray(cols, rows);
+    for (var i = 0; i < cols; i++) {
+      for (var j = 0; j < rows; j++) {
+        grid[i][j] = new Cell(i, j, w);
+      }
+    }
+    var ref1 = database.ref('bee/-L4RHoBEvd-XDQJ7IBfR');
+    ref1.set(beeData);
+    var ref2 = database.ref('reveal/0');
+    ref2.set(revealData);
+    console.log(score, highestScore);
+    if(highestScore < score){
+      var ref = database.ref('highest');
+      var data = {
+        Name: 'Anonymous',
+        Score: score
+      }
+      console.log(data);
+      ref.set(data);
+      setTimeout(function(){ alert('恭喜你破紀錄了! Congratulations! You broke the record!\r\nNew record: ' + highestScore + 'points.');});
     }
   }
 }
@@ -275,7 +344,21 @@ function errData3(err){ // value (void)
   console.log(err);
 }
 
+function gotData4(data){ // value (void)
+  console.log('got value highest');
+  highest = data.val();
+  console.log(highest);
+  highestScore = highest['Score'];
+  loading = false;
+}
+
+function errData4(err){ // value (void)
+  console.log("Error!");
+  console.log(err);
+}
+
 function button1_Clicked(){ // click (void)
+  score = 0;
   var c = parseInt(textBox1.value());
   var r = parseInt(textBox2.value());
   cols = min(c, cols);
@@ -290,8 +373,7 @@ function button1_Clicked(){ // click (void)
     }
   }
   var ref1 = database.ref('bee/-L4RHoBEvd-XDQJ7IBfR');
-  console.log('button1');
-    console.log(beeData);
+
   ref1.set(beeData);
 
   var ref2 = database.ref('reveal/0');
@@ -326,6 +408,7 @@ function button1_Clicked(){ // click (void)
 }
 
 function button2_Clicked(){ // click (void)
+  score = 0;
   totalBees = parseInt(textBox3.value());
   useRatio = false;
   for (var i = 0; i < cols; i++) {
@@ -346,6 +429,7 @@ function button2_Clicked(){ // click (void)
 }
 
 function button3_Clicked(){
+  score = 0;
   useRatio = true;
   beeRatio = parseFloat(textBox4.value());
   for (var i = 0; i < cols; i++) {
@@ -367,9 +451,13 @@ function button3_Clicked(){
 function Sweeper_Clicked(){ // click (void)
   console.log("Sweeper");
   marking = false;
+  Sweeper.style.backgroundColor = color(25, 23, 200, 50);
+  Marker.style.backgroundColor = null;
 }
 
 function Marker_Clicked(){ // click (void)
   console.log("Marker");
   marking = true;
+  Marker.style.backgroundColor = color(25, 23, 200, 50);
+  Sweeper.style.backgroundColor = null;
 }

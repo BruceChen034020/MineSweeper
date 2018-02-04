@@ -51,6 +51,9 @@ Cell.prototype.show = function() { // update screen
       }
     }
   }
+  if(loading){
+    text('?', this.x + this.w * 0.5, this.y + this.w - 6);
+  }
 }
 
 Cell.prototype.countBees = function() { // Count how many bees are in the neighbour
@@ -83,6 +86,9 @@ Cell.prototype.contains = function(x, y) { // A position (of the mouse) in conta
 Cell.prototype.reveal = function(recur) { // reveal recur=this is called by a recursive call; default=false.
   this.revealed = true;
   revealData['c'+this.i+'-'+this.j] = true;
+  if(recur){
+    score++;
+  }
 
   var ref = database.ref('reveal/0');
 
