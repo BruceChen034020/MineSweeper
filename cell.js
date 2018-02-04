@@ -6,10 +6,15 @@ function Cell(i, j, w) {
   this.w = w;
   this.neighborCount = 0;
   this.bee = false;
+  beeData['c'+i+'-'+j] = false;
   if(random(1)<beeRatio && useRatio==true){
     this.bee = true;
+    beeData['c'+i+'-'+j] = true;
   }
   this.revealed = false;
+  revealData['c'+i+'-'+j] = false;
+
+
 }
 
 Cell.prototype.show = function() { // update screen
@@ -59,12 +64,18 @@ Cell.prototype.contains = function(x, y) { // A position (of the mouse) in conta
   return (x > this.x && x < this.x + this.w && y > this.y && y < this.y + this.w);
 }
 
-Cell.prototype.reveal = function() { // reveal
+Cell.prototype.reveal = function(recur) { // reveal
   this.revealed = true;
+  revealData['c'+this.i+'-'+this.j] = true;
+
+  var ref = database.ref('reveal/0');
+
   if (this.neighborCount == 0) {
     // flood fill time
     this.floodFill();
   }
+  if(!recur)
+    ref.set(revealData);
 }
 
 Cell.prototype.floodFill = function() { // flood fill
@@ -80,7 +91,7 @@ Cell.prototype.floodFill = function() { // flood fill
       // Note the neighbor.bee check was not required.
       // See issue #184
       if (!neighbor.revealed) {
-        neighbor.reveal();
+        neighbor.reveal(true);
       }
     }
   }
