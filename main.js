@@ -5,8 +5,8 @@
 聯絡方式
     Facebook連結: https://www.facebook.com/bruce.chen.372
     LINE ID: brucechen0
-最後修改日期: 2017/2/4
-版本: 1.0.0.5
+最後修改日期: 2017/2/5
+版本: 1.0.0.6
 發表於: https://brucechen034020.github.io/
 程式碼尺度
   N/A
@@ -48,6 +48,11 @@ var highestScore; // highest score record (int)
 var highestScoreMaker // (string)
 var loading; // web page is loading
 //var userName; // user name // (string)
+var ol1; // online people list (ol)
+var onlineList = []; // (list)
+var ip; // ip adress of the client (string)
+var p1; // how many people are online (p)
+var p2; // contain online list (p)
 
 /* p5 functions */
 function setup() {
@@ -56,6 +61,14 @@ function setup() {
     var userName = data['ip']
     userName += ' (' + (data['country_name']) + ')';
     localStorage.setItem("name", userName);
+    ip = userName.replace('.', '-');
+    ip = ip.replace('.', '-');
+    ip = ip.replace('.', '-');
+    ip = ip.replace('.', '-');
+    ip = ip.replace(' ', '-');
+    ip = ip.replace('(', '');
+    ip = ip.replace(')', '');
+    ip = '-' + ip;
   });
   Naive = true;
   score = 0;
@@ -117,13 +130,13 @@ function setup() {
   var ref2 = database.ref('reveal/0');
   var ref3 = database.ref('size/-L4R24I9ESQ-G_xMicP0');
   var ref4 = database.ref('highest');
-
+  var ref5 = database.ref('online');
 
   ref1.on('value', gotData1, errData1);
   ref2.on('value', gotData2, errData2);
   ref3.on('value', gotData3, errData3);
   ref4.on('value', gotData4, errData4);
-
+  ref5.on('value', gotData5, errData5);
 
 
 
@@ -158,7 +171,19 @@ function setup() {
   ActivatedMineCount.innerHTML = "7 mines are activated.";
   ActivatedMineCount.value = "7 mines are activated.";
 
+  p1 = createP('3 people online');
+
+  p2= ActivatedMineCount = document.createElement("p");
+  document.body.appendChild(ActivatedMineCount);
+//  ActivatedMineCount.innerHTML = " people online";
+  //ActivatedMineCount.value = " people online";
+  ol1 = createElement('ol');
+  console.log(p1);
+  ol1.parent(p2);
+
   Sweeper_Clicked();
+
+  setTimeout(sendOnline, 10000);
 }
 
 function mousePressed() { // (void)
@@ -194,7 +219,7 @@ function mousePressed() { // (void)
 }
 
 function draw() {
-  frameRate(10);
+  frameRate(1);
   background(255);
   for (var i = 0; i < cols; i++) {
     for (var j = 0; j < rows; j++) {
@@ -206,6 +231,24 @@ function draw() {
     label5.html('Loading...');
   }
   gameOver2();
+  var listings = selectAll('.fuck');
+  var n = listings.length;
+  /*console.log('229: ' + n);
+  console.log(p1.innerHTML);
+  while(p1.innerHTML[0]!=' '){
+    p1.innerHTML = p1.innerHTML.slice(1);
+    console.log(p1.innerHTML);
+    p1.value = p1.value.slice(1);
+  }
+  console.log(p1.innerHTML);
+  var s = n + p1.innerHTML;
+  console.log(s);
+  console.log(ol1);*
+  //setTimeout(function(){p1.innerHTML = s;}, 0);
+  //p1.innerHTML = s;
+  console.log(p1.innerHTML);
+  //p1.value = n + p1.value;*/
+  p1.html(n + ' people online');
 }
 
 /* User defined functions */
@@ -288,6 +331,18 @@ function gameOver2(){ // 判斷 wheter the game is over (void)
 }
 
 /* Events */
+function sendOnline(){ // send a message to show you are online to the server
+  var ref = database.ref('online/' + ip);
+  var d = new Date();
+  var data = {
+    name: localStorage.getItem('name'),
+    time: d.toString()
+  }
+  console.log(data);
+  ref.set(data);
+  setTimeout(sendOnline, 10000);
+}
+
 function gotData1(data){ // value beeData (void)
   console.log('got value bee');
   beeData = data.val();
@@ -378,6 +433,48 @@ function errData4(err){ // value (void)
   console.log(err);
 }
 
+function gotData5(data){ // value (void)
+
+  var listings = selectAll('.fuck');
+  for(var i=0; i<listings.length; i++){
+    listings[i].remove();
+  }
+
+  var dt = data.val();
+
+  if(dt==null){
+    return;
+  }
+
+  var keys = Object.keys(dt);
+  for(var i=0; i<keys.length; i++){
+    var k = keys[i];
+    var n = dt[k].name;
+    var t = new Date(dt[k].time);
+
+    var now = new Date();
+
+    if(t.getTime() > now.getTime() - 30000){
+
+      var li = createElement('li', n + ' is online');
+      li.class('fuck');
+      li.parent(ol1);
+
+    }
+  }
+
+}
+
+function errData5(err){ // value (void)
+  console.log("Error!");
+  console.log(err);
+}
+
+function errData4(err){ // value (void)
+  console.log("Error!");
+  console.log(err);
+}
+
 function button1_Clicked(){ // click (void)
   score = 0;
   var c = parseInt(textBox1.value());
@@ -426,6 +523,7 @@ function button1_Clicked(){ // click (void)
       }
     }
   }
+
 }
 
 function button2_Clicked(){ // click (void)
@@ -470,8 +568,20 @@ function button3_Clicked(){
 }
 
 function button4_Clicked(){ // click (void)
+  /* Change username */
   var userName = textBox5.value();
   localStorage.setItem("name", userName);
+
+  /* Send record */
+  var reff = database.ref('record');
+  var now = new Date();
+  var data = {
+    Ip: ip,
+    Name: localStorage.getItem('name'),
+    Time: now.toString()
+  }
+  console.log(data);
+  reff.push(data);
 }
 
 function Sweeper_Clicked(){ // click (void)
