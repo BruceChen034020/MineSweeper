@@ -6,7 +6,7 @@
     Facebook連結: https://www.facebook.com/bruce.chen.372
     LINE ID: brucechen0
 最後修改日期: 2017/2/9
-版本: 1.0.0.8
+版本: 1.0.0.9
 發表於: https://brucechen034020.github.io/
 程式碼尺度
   N/A
@@ -59,7 +59,7 @@ var ol2; // activated bomb list (ol)
 var activationList = []; // (Cell list)
 var p4; // contain activation list (p)
 
-var MaxCols = 80; // maximum amount of Cols
+var MaxCols = 40; // maximum amount of Cols
 var MaxRows = 40; // maximum amout of rows
 
 /* p5 functions */
