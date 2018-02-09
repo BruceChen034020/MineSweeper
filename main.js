@@ -5,7 +5,7 @@
 聯絡方式
     Facebook連結: https://www.facebook.com/bruce.chen.372
     LINE ID: brucechen0
-最後修改日期: 2017/2/5
+最後修改日期: 2017/2/9
 版本: 1.0.0.6
 發表於: https://brucechen034020.github.io/
 程式碼尺度
@@ -35,6 +35,8 @@ var ActivatedMineCount; // (p)
 var button1; // (Button)
 var button2; // (Button)
 var button3; // (Button)
+var button4; // (Button)
+var button5; // (Button)
 var textBox1; // cols (Input)
 var textBox2; // rows (Input)
 var textBox3; // totalBees (Input)
@@ -53,7 +55,9 @@ var onlineList = []; // (list)
 var ip; // ip adress of the client (string)
 var p1; // how many people are online (p)
 var p2; // contain online list (p)
-
+var ol2; // activated bomb list (ol)
+var activationList = []; // (Cell list)
+var p4; // contain activation list (p)
 /* p5 functions */
 function setup() {
   $.getJSON('https://freegeoip.net/json/', function(data) {
@@ -152,7 +156,10 @@ function setup() {
   label5 =  createElement('label');
   label5.parent(document.body);
   label5.html('75 points');
-  label5.style('font-size', 72 + 'px')
+  label5.style('font-size', 72 + 'px');
+
+  button5 = createButton('End game');
+  button5.mousePressed(button5_Clicked);
 
   createP('');
 
@@ -171,21 +178,30 @@ function setup() {
   ActivatedMineCount.innerHTML = "7 mines are activated.";
   ActivatedMineCount.value = "7 mines are activated.";
 
+  p4 = document.createElement('p');
+  document.body.appendChild(p4);
+
+  ol2 = createElement('ol');
+  ol2.parent(p4);
+
   p1 = createP('3 people online');
 
-  p2= ActivatedMineCount = document.createElement("p");
-  document.body.appendChild(ActivatedMineCount);
+  p2 = document.createElement("p");
+  document.body.appendChild(p2);
 //  ActivatedMineCount.innerHTML = " people online";
   //ActivatedMineCount.value = " people online";
   ol1 = createElement('ol');
-  console.log(p1);
+
   ol1.parent(p2);
 
   Sweeper_Clicked();
 
   setTimeout(sendOnline, 10000);
-}
 
+  var welcomeMessage = "歡迎來玩踩地雷!\r\n注意這些地雷不只是地雷，還是定時炸彈!\r\n一旦你有足夠的線索知道某一格是地雷時，請立刻標記它。如果在能知悉某格確定為地雷後20秒內沒有標記它，它就會爆炸，並且扣你20分。\r\n";
+  var welcomeMessageEn = "Welcome to play mine sweeper!\r\nThese mines are not only mines but also time bombs.\r\nOnce you have sufficient information to know a cell is a bomb, you should immediately mark it. Otherwise, it will automatically explode in 20 seconds, and you will be taken 20 points off. The bombs will start timing only after you have sufficient information to locate it.";
+  alert(welcomeMessage + welcomeMessageEn);
+}
 function mousePressed() { // (void)
   for (var i = 0; i < cols; i++) {
     for (var j = 0; j < rows; j++) {
@@ -219,11 +235,17 @@ function mousePressed() { // (void)
 }
 
 function draw() {
-  frameRate(1);
+
+  frameRate(10);
   background(255);
   for (var i = 0; i < cols; i++) {
     for (var j = 0; j < rows; j++) {
       grid[i][j].show();
+      grid[i][j].countBee2();
+      grid[i][j].countBee3();
+      grid[i][j].countBee4();
+      grid[i][j].countBee5();
+      grid[i][j].countBee6();
     }
   }
   label5.html(score + ' points');
@@ -249,6 +271,8 @@ function draw() {
   console.log(p1.innerHTML);
   //p1.value = n + p1.value;*/
   p1.html(n + ' people online');
+  Elapse();
+  actiList();
 }
 
 /* User defined functions */
@@ -352,18 +376,30 @@ function gotData1(data){ // value beeData (void)
       grid[i][j].bee = beeData['c'+i+'-'+j];
     }
   }
+  Cell.prototype.countBeeReset();
+ for(var k=0; k<7; k++){
   for(var i=0; i<cols; i++){
     for(var j=0; j<rows; j++){
       grid[i][j].countBees();
+
+        grid[i][j].countBee2();
+        grid[i][j].countBee3();
+        grid[i][j].countBee4();
+        grid[i][j].countBee5();
+        grid[i][j].countBee6();
     }
   }
+  if(k==3){
+    Cell.prototype.countBeeReset2();
+  }
+ }
 }
 function errData1(err){ // value revealData (void)
   console.log("Error!");
   console.log(err);
 }
 
-function gotData2(data){ // value size (void)
+function gotData2(data){ // value reveal (void)
   console.log('got value reveal');
   revealData = data.val();
   console.log(revealData);
@@ -372,6 +408,23 @@ function gotData2(data){ // value size (void)
       grid[i][j].revealed = revealData['c'+i+'-'+j];
     }
   }
+  Cell.prototype.countBeeReset();
+ for(var k=0; k<7; k++){
+  for(var i=0; i<cols; i++){
+    for(var j=0; j<rows; j++){
+      grid[i][j].countBees();
+
+        grid[i][j].countBee2();
+        grid[i][j].countBee3();
+        grid[i][j].countBee4();
+        grid[i][j].countBee5();
+        grid[i][j].countBee6();
+    }
+  }
+  if(k==3){
+    Cell.prototype.countBeeReset2();
+  }
+ }
 }
 
 function errData2(err){ // value (void)
@@ -379,7 +432,7 @@ function errData2(err){ // value (void)
   console.log(err);
 }
 
-function gotData3(data){ // value (void)
+function gotData3(data){ // value size (void)
   console.log('got value size');
   sizeData = data.val();
   console.log(sizeData);
@@ -419,7 +472,7 @@ function errData3(err){ // value (void)
   console.log(err);
 }
 
-function gotData4(data){ // value (void)
+function gotData4(data){ // value highest (void)
   console.log('got value highest');
   highest = data.val();
   console.log(highest);
@@ -433,7 +486,7 @@ function errData4(err){ // value (void)
   console.log(err);
 }
 
-function gotData5(data){ // value (void)
+function gotData5(data){ // value online (void)
 
   var listings = selectAll('.fuck');
   for(var i=0; i<listings.length; i++){
@@ -476,6 +529,7 @@ function errData4(err){ // value (void)
 }
 
 function button1_Clicked(){ // click (void)
+  activationList = [];
   score = 0;
   var c = parseInt(textBox1.value());
   var r = parseInt(textBox2.value());
@@ -527,6 +581,7 @@ function button1_Clicked(){ // click (void)
 }
 
 function button2_Clicked(){ // click (void)
+  activatinList = [];
   score = 0;
   totalBees = parseInt(textBox3.value());
   useRatio = false;
@@ -548,6 +603,7 @@ function button2_Clicked(){ // click (void)
 }
 
 function button3_Clicked(){
+  activationList = [];
   score = 0;
   useRatio = true;
   beeRatio = parseFloat(textBox4.value());
@@ -582,6 +638,10 @@ function button4_Clicked(){ // click (void)
   }
   console.log(data);
   reff.push(data);
+}
+
+function button5_Clicked(){
+  gameOver();
 }
 
 function Sweeper_Clicked(){ // click (void)
