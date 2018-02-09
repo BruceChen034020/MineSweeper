@@ -1,5 +1,5 @@
 /*
-版本: 1.0.0.6
+版本: 1.0.0.7
 */
 var dict = {}; // dictionary<cell(String), time left(int)> // time left unit: decisecond
 
@@ -83,6 +83,30 @@ function Elapse(){ // update dict (void)
       k.reveal(false);
       alert("地雷自爆，扣20分。One mine exploded. You are taken 20 points off.");
       score -= 20;
+    }
+  }
+}
+
+function newActivationRule(){ // new activation rule because of 何俊偉
+  var unrevealed = 0;
+  var total_beeLeft = totalBees;
+  for(var i=0; i<cols; i++){
+    for(var j=0; j<rows; j++){
+      if(!grid[i][j].revealed){
+        unrevealed++;
+      }
+      if(grid[i][j].revealed && grid[i][j].bee){
+        total_beeLeft--;
+      }
+    }
+  }
+  if(total_beeLeft==unrevealed){
+    for(var i=0; i<cols; i++){
+      for(var j=0; j<rows; j++){
+        if( (!grid[i][j].revealed) && grid[i][j].bee){
+          grid[i][j].beeActivated = true;
+        }
+      }
     }
   }
 }

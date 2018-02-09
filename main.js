@@ -6,7 +6,7 @@
     Facebook連結: https://www.facebook.com/bruce.chen.372
     LINE ID: brucechen0
 最後修改日期: 2017/2/9
-版本: 1.0.0.6
+版本: 1.0.0.7
 發表於: https://brucechen034020.github.io/
 程式碼尺度
   N/A
@@ -58,8 +58,13 @@ var p2; // contain online list (p)
 var ol2; // activated bomb list (ol)
 var activationList = []; // (Cell list)
 var p4; // contain activation list (p)
+
+var MaxCols = 80; // maximum amount of Cols
+var MaxRows = 40; // maximum amout of rows
+
 /* p5 functions */
 function setup() {
+
   $.getJSON('https://freegeoip.net/json/', function(data) {
     console.log(JSON.stringify(data, null, 2));
     var userName = data['ip']
@@ -123,13 +128,13 @@ function setup() {
   createP('');
 
   createCanvas(401, 401);
-  grid = make2DArray(cols, rows);
-  for (var i = 0; i < cols; i++) {
-    for (var j = 0; j < rows; j++) {
+  grid = make2DArray(MaxCols, MaxRows);
+  for (var i = 0; i < MaxCols; i++) {
+    for (var j = 0; j < MaxRows; j++) {
       grid[i][j] = new Cell(i, j, w);
     }
   }
-
+//button1_Clicked();
   var ref1 = database.ref('bee/-L4RHoBEvd-XDQJ7IBfR');
   var ref2 = database.ref('reveal/0');
   var ref3 = database.ref('size/-L4R24I9ESQ-G_xMicP0');
@@ -248,6 +253,7 @@ function draw() {
       grid[i][j].countBee6();
     }
   }
+  newActivationRule();
   label5.html(score + ' points');
   if(loading){
     label5.html('Loading...');
@@ -309,6 +315,7 @@ function make2DArray(cols, rows) { // make 2D array (2D array)
   return arr;
 }
 function gameOver() { // (void)
+  console.log("Game over type 1");
   for (var i = 0; i < cols; i++) {
     for (var j = 0; j < rows; j++) {
       grid[i][j].revealed = true;
@@ -325,6 +332,7 @@ function gameOver2(){ // 判斷 wheter the game is over (void)
     }
   }
   if(over){ // the game is over
+    console.log("Game over type 2");
     setTimeout(function(){ alert("Game over!\r\nYour score: " + score + " points.\r\nYour highest score record: " + localStorage.getItem("score")
       + " points.\r\nGlobal highest score record: " + highestScore + ' points by ' + highestScoreMaker); score = 0;}, 0);
 
@@ -371,13 +379,14 @@ function gotData1(data){ // value beeData (void)
   console.log('got value bee');
   beeData = data.val();
   console.log(beeData);
+  activationList = [];
   for(var i=0; i<cols; i++){
     for(var j=0; j<rows; j++){
       grid[i][j].bee = beeData['c'+i+'-'+j];
     }
   }
   Cell.prototype.countBeeReset();
- for(var k=0; k<7; k++){
+ /*for(var k=0; k<7; k++){
   for(var i=0; i<cols; i++){
     for(var j=0; j<rows; j++){
       grid[i][j].countBees();
@@ -392,7 +401,7 @@ function gotData1(data){ // value beeData (void)
   if(k==3){
     Cell.prototype.countBeeReset2();
   }
- }
+}*/
 }
 function errData1(err){ // value revealData (void)
   console.log("Error!");
@@ -436,6 +445,7 @@ function gotData3(data){ // value size (void)
   console.log('got value size');
   sizeData = data.val();
   console.log(sizeData);
+  activationList = [];
   var c = sizeData.Cols;
   var r = sizeData.Rows;
   cols = min(c, cols);
@@ -444,6 +454,10 @@ function gotData3(data){ // value size (void)
   widt = c * w + 1;
   heigh = r * w + 1;
   resizeCanvas(widt, heigh);
+  if(Naive){
+    cols = c;
+    rows = r;
+  }
 if(!Naive){
   grid = make2DArray(max(c, cols), max(r, rows));
   for (var i = 0; i < max(c, cols); i++) {
@@ -465,6 +479,7 @@ if(!Naive){
   ref2.set(revealData);
 }
   Naive = false;
+  Cell.prototype.updateCells();
 }
 
 function errData3(err){ // value (void)
@@ -533,6 +548,10 @@ function button1_Clicked(){ // click (void)
   score = 0;
   var c = parseInt(textBox1.value());
   var r = parseInt(textBox2.value());
+  if(c>MaxCols || r>MaxRows){
+    alert('Your inputs exceed maximum size');
+    return;
+  }
   cols = min(c, cols);
   rows = min(r, rows);
   grid = make2DArray(c, r);

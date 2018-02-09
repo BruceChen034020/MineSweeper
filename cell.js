@@ -6,7 +6,7 @@
     Facebook連結: https://www.facebook.com/bruce.chen.372
     LINE ID: brucechen0
 最後修改日期: 2017/2/9
-版本: 1.0.0.6
+版本: 1.0.0.7
 發表於: https://brucechen034020.github.io/
 程式碼尺度
   N/A
@@ -60,6 +60,20 @@ Cell.prototype.countBeeReset2 = function(){
     for(var j=0; j<rows; j++){
       grid[i][j].known = false;
       grid[i][j].beeActivated = false;
+    }
+  }
+}
+
+Cell.prototype.updateCells = function(){
+  for(var i=0; i<cols; i++){
+    for(var j=0; j<rows; j++){
+      grid[i][j].revealed = revealData['c'+i+'-'+j];
+      grid[i][j].bee = beeData['c'+i+'-'+j];
+    }
+  }
+  for(var i=0; i<cols; i++){
+    for(var j=0; j<rows; j++){
+      grid[i][j].countBees();
     }
   }
 }
@@ -203,11 +217,11 @@ Cell.prototype.countBee4 = function(){ // update beeLeft (void)
 }
 
 Cell.prototype.countBee5 = function(){ // Special case activation 1-2-1 (void)
-  if(this.i<=0 || this.i>=rows-1){
+  if(this.i<=0 || this.i>=cols-1){
     return;
 
   }
-  if(this.j<=0 || this.j>=cols-1){
+  if(this.j<=0 || this.j>=rows-1){
     return;
   }
   if(this.beeLeft==2
@@ -265,11 +279,11 @@ Cell.prototype.countBee5 = function(){ // Special case activation 1-2-1 (void)
 }
 
 Cell.prototype.countBee6 = function(){ // Special case 1-2-2-1 (void)
-  if(this.i<=0 || this.i>=rows-2){
+  if(this.i<=0 || this.i>=cols-2){
     return;
 
   }
-  if(this.j<=0 || this.j>=cols-2){
+  if(this.j<=0 || this.j>=rows-2){
     return;
   }
   if(this.beeLeft==2
@@ -304,6 +318,7 @@ Cell.prototype.countBee6 = function(){ // Special case 1-2-2-1 (void)
         grid[this.i+1][this.j].beeActivated = true;
         grid[this.i+1][this.j+1].beeActivated = true;
       }
+
       if(this.beeLeft==2
           && grid[this.i-1][this.j-1].known==false
           && grid[this.i][this.j-1].known==false
