@@ -1,5 +1,5 @@
 /*
-版本: 1.0.0.7
+版本: 1.0.0.8
 */
 var dict = {}; // dictionary<cell(String), time left(int)> // time left unit: decisecond
 

@@ -6,7 +6,7 @@
     Facebook連結: https://www.facebook.com/bruce.chen.372
     LINE ID: brucechen0
 最後修改日期: 2017/2/9
-版本: 1.0.0.7
+版本: 1.0.0.8
 發表於: https://brucechen034020.github.io/
 程式碼尺度
   N/A
@@ -548,6 +548,10 @@ function button1_Clicked(){ // click (void)
   score = 0;
   var c = parseInt(textBox1.value());
   var r = parseInt(textBox2.value());
+  if(c<=0 || r<=0){
+    alert("The size you set doesn't make sense.");
+    return;
+  }
   if(c>MaxCols || r>MaxRows){
     alert('Your inputs exceed maximum size');
     return;
@@ -602,6 +606,10 @@ function button1_Clicked(){ // click (void)
 function button2_Clicked(){ // click (void)
   activatinList = [];
   score = 0;
+  if ( parseInt(textBox3.value()) > cols*rows){
+    alert("The number of mines you set doesn't make sense.");
+    return;
+  }
   totalBees = parseInt(textBox3.value());
   useRatio = false;
   for (var i = 0; i < cols; i++) {
