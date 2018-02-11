@@ -6,7 +6,7 @@
     Facebook連結: https://www.facebook.com/bruce.chen.372
     LINE ID: brucechen0
 最後修改日期: 2017/2/11
-版本: 1.0.0.11
+版本: 1.0.0.12
 發表於: https://brucechen034020.github.io/
 程式碼尺度
   N/A
@@ -115,6 +115,7 @@ function setup() {
   label2.parent(document.body);
   button1 = createButton('Set');
   button1.mousePressed(button1_Clicked);
+  label7 =createElement('label', '    地圖大小上限 Maximum map size: ' + MaxCols + 'columns x ' + MaxRows + ' rows.');
   createP('');
 
   textBox3 = createInput('30');
