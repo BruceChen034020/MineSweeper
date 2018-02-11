@@ -405,6 +405,7 @@ function gotData1(data){ // value beeData (void)
     }
   }
   Cell.prototype.countBeeReset();
+  Cell.prototype.updateTotalBees();
  /*for(var k=0; k<7; k++){
   for(var i=0; i<cols; i++){
     for(var j=0; j<rows; j++){
@@ -499,6 +500,7 @@ if(!Naive){
 }
   Naive = false;
   Cell.prototype.updateCells();
+  Cell.prototype.updateTotalBees();
 }
 
 function errData3(err){ // value (void)

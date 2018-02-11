@@ -393,3 +393,18 @@ Cell.prototype.floodFill = function() { // flood fill
     }
   }
 }
+
+Cell.prototype.updateTotalBees = function(){
+  var total = 0;
+  for(var i=0; i<cols; i++){
+    for(var j=0; j<rows; j++){
+      if(grid[i][j].bee){
+        total++;
+      }
+    }
+  }
+  totalBees = total;
+  var ref = database.ref('totalBees');
+  var data = {totalBees: totalBees};
+  ref.set(data);
+}
