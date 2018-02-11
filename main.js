@@ -6,7 +6,7 @@
     Facebook連結: https://www.facebook.com/bruce.chen.372
     LINE ID: brucechen0
 最後修改日期: 2017/2/11
-版本: 1.0.0.9
+版本: 1.0.0.8
 發表於: https://brucechen034020.github.io/
 程式碼尺度
   N/A
@@ -64,6 +64,7 @@ var MaxRows = 20; // maximum amout of rows
 
 /* p5 functions */
 function setup() {
+  $('body').on('contextmenu', 'canvas', function(e){ return false; });
 
   $.getJSON('https://freegeoip.net/json/', function(data) {
     console.log(JSON.stringify(data, null, 2));
@@ -207,7 +208,15 @@ function setup() {
   var welcomeMessageEn = "Welcome to play mine sweeper!\r\nThese mines are not only mines but also time bombs.\r\nOnce you have sufficient information to know a cell is a bomb, you should immediately mark it. Otherwise, it will automatically explode in 20 seconds, and you will be taken 20 points off. The bombs will start timing only after you have sufficient information to locate it.";
   alert(welcomeMessage + welcomeMessageEn);
 }
-function mousePressed() { // (void)
+function mousePressed(e) { // (void)
+  console.log('Mouse: ' + e.button);
+  alert('Mouse: ' + e.button);
+  if(e.button==0){
+    Sweeper_Clicked();
+  }
+  if(e.button==2){
+    Marker_Clicked();
+  }
   for (var i = 0; i < cols; i++) {
     for (var j = 0; j < rows; j++) {
       if (grid[i][j].contains(mouseX, mouseY)) {
