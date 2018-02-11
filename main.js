@@ -115,7 +115,7 @@ function setup() {
   label2.parent(document.body);
   button1 = createButton('Set');
   button1.mousePressed(button1_Clicked);
-  label7 =createElement('label', '    地圖大小上限 Maximum map size: ' + MaxCols + 'columns x ' + MaxRows + ' rows.');
+  label7 =createElement('label', '    地圖大小上限 Maximum map size: ' + MaxCols + ' columns x ' + MaxRows + ' rows.');
   createP('');
 
   textBox3 = createInput('30');
