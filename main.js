@@ -6,7 +6,7 @@
     Facebook連結: https://www.facebook.com/bruce.chen.372
     LINE ID: brucechen0
 最後修改日期: 2017/2/11
-版本: 1.0.0.10
+版本: 1.0.0.11
 發表於: https://brucechen034020.github.io/
 程式碼尺度
   N/A
@@ -169,7 +169,7 @@ function setup() {
 
   createP('');
 
-  Sweeper = document.createElement("button");
+  /*Sweeper = document.createElement("button");
   document.body.appendChild(Sweeper);
   Sweeper.innerHTML = "踩下去 Sweeper (S)";
   Sweeper.addEventListener("click", Sweeper_Clicked);
@@ -177,7 +177,7 @@ function setup() {
   Marker = document.createElement("button");
   document.body.appendChild(Marker);
   Marker.innerHTML = "標記地雷 Marker (M)";
-  Marker.addEventListener("click", Marker_Clicked);
+  Marker.addEventListener("click", Marker_Clicked);*/
 
   ActivatedMineCount = document.createElement("p");
   document.body.appendChild(ActivatedMineCount);
@@ -692,13 +692,13 @@ function button5_Clicked(){
 function Sweeper_Clicked(){ // click (void)
   console.log("Sweeper");
   marking = false;
-  Sweeper.style.backgroundColor = color(25, 23, 200, 50);
-  Marker.style.backgroundColor = null;
+  /*Sweeper.style.backgroundColor = color(25, 23, 200, 50);
+  Marker.style.backgroundColor = null;*/
 }
 
 function Marker_Clicked(){ // click (void)
   console.log("Marker");
   marking = true;
-  Marker.style.backgroundColor = color(25, 23, 200, 50);
-  Sweeper.style.backgroundColor = null;
+  /*Marker.style.backgroundColor = color(25, 23, 200, 50);
+  Sweeper.style.backgroundColor = null;*/
 }
