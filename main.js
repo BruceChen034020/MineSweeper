@@ -6,7 +6,7 @@
     Facebook連結: https://www.facebook.com/bruce.chen.372
     LINE ID: brucechen0
 最後修改日期: 2017/2/11
-版本: 1.0.0.20
+版本: 1.0.0.21
 發表於: https://brucechen034020.github.io/
 程式碼尺度
   N/A
@@ -381,7 +381,7 @@ function gameOver2(){ // 判斷 wheter the game is over (void)
     }
   }
 }
-function Reset(){
+function Reset(){ // send a reset message to other players
   var ref7 = database.ref('reset/0');
   data = {random: random(1),
           name: localStorage.getItem('name')};

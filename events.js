@@ -1,5 +1,5 @@
 /*
-版本: 1.0.0.20
+版本: 1.0.0.21
 */
 
 /* Value Events */
@@ -189,6 +189,7 @@ function gotData7(data){ // value reset (void)
   console.log('got Reset');
   if(!Naive) alert('Game reset by ' + data.val()['name']);
   score = 0;
+  activationList = [];
   Naive = false;
 }
 
