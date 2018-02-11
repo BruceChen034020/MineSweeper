@@ -1,5 +1,5 @@
 /*
-版本: 1.0.0.16
+版本: 1.0.0.20
 */
 
 /* Value Events */
@@ -119,7 +119,7 @@ if(!Naive){
   var ref2 = database.ref('reveal/0');
   ref2.set(revealData);
 }
-  Naive = false;
+
   Cell.prototype.updateCells();
   Cell.prototype.updateTotalBees();
 }
@@ -187,7 +187,9 @@ function errData4(err){ // value (void)
 
 function gotData7(data){ // value reset (void)
   console.log('got Reset');
+  if(!Naive) alert('Game reset by ' + data.val()['name']);
   score = 0;
+  Naive = false;
 }
 
 function errData7(err){ // value (void)
@@ -198,9 +200,7 @@ function errData7(err){ // value (void)
 /* Click Events */
 
 function button1_Clicked(){ // click, set size (void)
-  var ref7 = database.ref('reset/0');
-  data = {random: random(1)};
-  ref7.set(data);
+  Reset();
 
   activationList = [];
   score = 0;
@@ -262,9 +262,7 @@ function button1_Clicked(){ // click, set size (void)
 }
 
 function button2_Clicked(){ // click, set number of mines (void)
-  var ref7 = database.ref('reset/0');
-  data = {random: random(1)};
-  ref7.set(data);
+  Reset();
 
   activatinList = [];
   score = 0;
@@ -292,10 +290,7 @@ function button2_Clicked(){ // click, set number of mines (void)
 }
 
 function button3_Clicked(){ // click, set mine ratio (void)
-  var ref7 = database.ref('reset/0');
-  data = {random: random(1)};
-  ref7.set(data);
-console.log(data);
+  Reset();
   activationList = [];
   score = 0;
   useRatio = true;
