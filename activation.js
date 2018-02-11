@@ -1,5 +1,5 @@
 /*
-版本: 1.0.0.13
+版本: 1.0.0.14
 */
 var dict = {}; // dictionary<cell(String), time left(int)> // time left unit: decisecond
 
@@ -100,7 +100,7 @@ function newActivationRule(){ // new activation rule because of 何俊偉
       }
     }
   }
-  console.log(total_beeLeft, unrevealed);
+
   if(total_beeLeft==unrevealed){
     for(var i=0; i<cols; i++){
       for(var j=0; j<rows; j++){
