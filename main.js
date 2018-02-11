@@ -6,7 +6,7 @@
     Facebook連結: https://www.facebook.com/bruce.chen.372
     LINE ID: brucechen0
 最後修改日期: 2017/2/11
-版本: 1.0.0.17
+版本: 1.0.0.19
 發表於: https://brucechen034020.github.io/
 程式碼尺度
   N/A
@@ -366,9 +366,6 @@ function gameOver2(){ // 判斷 wheter the game is over (void)
     ref1.set(beeData);
     var ref2 = database.ref('reveal/0');
     ref2.set(revealData);
-    var ref7 = database.ref('reset/0');
-    var data = {random: random(1)};
-    ref7.set(data);
     if(score > localStorage.getItem("score")){
       localStorage.setItem("score", score);
     }
@@ -380,7 +377,7 @@ function gameOver2(){ // 判斷 wheter the game is over (void)
       }
       console.log(data);
       ref.set(data);
-      setTimeout(function(){ alert('恭喜你破紀錄了! Congratulations! You broke the record!\r\nNew record: ' + highestScore + 'points by ' + highestScoreMaker );});
+      setTimeout(function(){ alert('恭喜你破紀錄了! Congratulations! You broke the record!\r\nNew record: ' + highestScore + 'points by ' + highestScoreMaker );}, 0);
     }
   }
 }
