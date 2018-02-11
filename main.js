@@ -6,7 +6,7 @@
     Facebook連結: https://www.facebook.com/bruce.chen.372
     LINE ID: brucechen0
 最後修改日期: 2017/2/11
-版本: 1.0.0.13
+版本: 1.0.0.15
 發表於: https://brucechen034020.github.io/
 程式碼尺度
   N/A
@@ -395,6 +395,7 @@ function sendOnline(){ // send a message to show you are online to the server
 }
 
 function gotData1(data){ // value beeData (void)
+  score = 0;
   console.log('got value bee');
   beeData = data.val();
   console.log(beeData);
@@ -462,6 +463,7 @@ function errData2(err){ // value (void)
 }
 
 function gotData3(data){ // value size (void)
+  score = 0;
   console.log('got value size');
   sizeData = data.val();
   console.log(sizeData);
