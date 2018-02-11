@@ -5,7 +5,7 @@
 聯絡方式
     Facebook連結: https://www.facebook.com/bruce.chen.372
     LINE ID: brucechen0
-最後修改日期: 2017/2/10
+最後修改日期: 2017/2/11
 版本: 1.0.0.8
 發表於: https://brucechen034020.github.io/
 程式碼尺度
@@ -170,12 +170,12 @@ function setup() {
 
   Sweeper = document.createElement("button");
   document.body.appendChild(Sweeper);
-  Sweeper.innerHTML = "踩下去 Sweeper";
+  Sweeper.innerHTML = "踩下去 Sweeper (S)";
   Sweeper.addEventListener("click", Sweeper_Clicked);
 
   Marker = document.createElement("button");
   document.body.appendChild(Marker);
-  Marker.innerHTML = "標記地雷 Marker";
+  Marker.innerHTML = "標記地雷 Marker (M)";
   Marker.addEventListener("click", Marker_Clicked);
 
   ActivatedMineCount = document.createElement("p");
@@ -236,6 +236,16 @@ function mousePressed() { // (void)
 
       }
     }
+  }
+}
+
+function keyPressed(){
+  console.log('Key: ' + keyCode);
+  if(keyCode == 83){
+    Sweeper_Clicked();
+  }
+  if(keyCode == 77){
+    Marker_Clicked();
   }
 }
 
