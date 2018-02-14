@@ -6,7 +6,7 @@
     Facebook連結: https://www.facebook.com/bruce.chen.372
     LINE ID: brucechen0
 最後修改日期: 2017/2/14
-版本: 1.0.0.22
+版本: 1.0.0.23
 發表於: https://brucechen034020.github.io/
 程式碼尺度
   N/A
@@ -136,7 +136,7 @@ function setup() {
       grid[i][j] = new Cell(i, j, w);
     }
   }
-button1_Clicked();
+//button1_Clicked();
   var ref1 = database.ref('bee/-L4RHoBEvd-XDQJ7IBfR');
   var ref2 = database.ref('reveal/0');
   var ref3 = database.ref('size/-L4R24I9ESQ-G_xMicP0');
