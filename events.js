@@ -2,7 +2,7 @@
 版本: 1.0.0.21
 */
 
-/* Value Events */
+/* Timed Events */
 function sendOnline(){ // send a message to show you are online to the server
   var ref = database.ref('online/' + ip);
   var d = new Date();
@@ -15,6 +15,7 @@ function sendOnline(){ // send a message to show you are online to the server
   setTimeout(sendOnline, 10000);
 }
 
+/* Value Events */
 function gotData1(data){ // value beeData (void)
   console.log('got value bee');
   beeData = data.val();
