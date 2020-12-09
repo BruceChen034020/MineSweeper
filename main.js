@@ -5,7 +5,7 @@
 聯絡方式
     Facebook連結: https://www.facebook.com/bruce.chen.372
     LINE ID: brucechen0
-最後修改日期: 2017/2/14
+最後修改日期: 2020/12/9
 版本: 1.0.0.23
 發表於: https://brucechen034020.github.io/
 程式碼尺度
@@ -66,7 +66,7 @@ var MaxRows = 20; // maximum amout of rows
 function setup() {
   $('body').on('contextmenu', 'canvas', function(e){ return false; });
 
-  $.getJSON('https://freegeoip.net/json/', function(data) {
+  $.getJSON('https://api.ipstack.com/check?access_key=47879be4894b337833120069966fef8d', function(data) {
     console.log(JSON.stringify(data, null, 2));
     var userName = data['ip']
     userName += ' (' + (data['country_name']) + ')';
